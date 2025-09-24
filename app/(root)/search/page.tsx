@@ -9,6 +9,7 @@ import {
 	RATINGS,
 	SORT_OPTIONS,
 	ACTIVE_OPTION_CLASS as activeClass,
+	INACTIVE_OPTION_CLASS as inactiveClass,
 } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/shared/pagination";
@@ -108,7 +109,7 @@ const SearchPage = async (props: {
 								className={
 									category === "all" || category === ""
 										? activeClass
-										: ""
+										: inactiveClass
 								}
 							>
 								Any
@@ -124,7 +125,7 @@ const SearchPage = async (props: {
 									className={
 										x.category === category
 											? activeClass
-											: ""
+											: inactiveClass
 									}
 								>
 									{x.category}
@@ -140,7 +141,11 @@ const SearchPage = async (props: {
 						<li>
 							<Link
 								href={getFilterUrl({ p: "all" }, currentParams)}
-								className={price === "all" ? activeClass : ""}
+								className={
+									price === "all"
+										? activeClass
+										: inactiveClass
+								}
 							>
 								Any
 							</Link>
@@ -153,7 +158,9 @@ const SearchPage = async (props: {
 										currentParams
 									)}
 									className={
-										p.value === price ? activeClass : ""
+										p.value === price
+											? activeClass
+											: inactiveClass
 									}
 								>
 									{p.name}
@@ -170,7 +177,11 @@ const SearchPage = async (props: {
 						<li>
 							<Link
 								href={getFilterUrl({ r: "all" }, currentParams)}
-								className={rating === "all" ? activeClass : ""}
+								className={
+									rating === "all"
+										? activeClass
+										: inactiveClass
+								}
 							>
 								Any
 							</Link>
@@ -185,7 +196,7 @@ const SearchPage = async (props: {
 									className={
 										r.toString() === rating
 											? activeClass
-											: ""
+											: inactiveClass
 									}
 								>
 									{r} Star{r > 1 ? "s" : ""} &amp; Up
@@ -196,7 +207,7 @@ const SearchPage = async (props: {
 				</div>
 			</div>
 			<div className="md:col-span-4 space-y-4">
-				<div className="flex justify-between flex-col md:flex-row my-4">
+				<div className="flex justify-between flex-col md:flex-row md:my-4 my-2">
 					<div className="flex items-center">
 						{q !== "all" && q !== "" && 'Query: "' + q + '"'}{" "}
 						{category !== "all" &&
@@ -218,15 +229,17 @@ const SearchPage = async (props: {
 							</Button>
 						) : null}
 					</div>
-					<div className="max-w-md text-2xs mb-2 flex items-center gap-4">
-						<div className="font-bold">Sort by:</div>
-						<div className="grid grid-cols-2 gap-1">
+					<div className="max-w-md text-2xs mb-2 flex items-center gap-2">
+						<div className="font-bold font-heading">Sort by:</div>
+						<div className="grid grid-cols-2 gap-0.5 text-2xs">
 							{SORT_OPTIONS.map((s) => (
 								<Link
 									key={s.value}
 									href={getFilterUrl({ s: s.value })}
 									className={`${
-										s.value === sort && activeClass
+										s.value === sort
+											? activeClass
+											: inactiveClass
 									}`}
 								>
 									{s.name}

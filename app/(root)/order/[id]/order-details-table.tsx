@@ -142,54 +142,67 @@ const OrderDetailsTable = ({
 	};
 	return (
 		<>
-			<h2 className="text-2xl py-4">Order {formatId(id)}</h2>
-			<div className="grid md:grid-cols-3 gap-5">
-				<div className="col-span-2 space-y-4 overflow-x-auto">
+			<div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+				<h2 className="text-2xl py-4 col-span-2 md:col-span-3">
+					Order {formatId(id)}
+				</h2>
+				<div className="space-y-4 col-span-2 overflow-x-auto">
 					<Card>
-						<CardContent className="p-4 gap-4">
-							<h2 className="text-xl pb-4">Payment Method</h2>
-							<p className="mb-2">{paymentMethod}</p>
-							{isPaid ? (
-								<Badge variant={"secondary"}>
-									Paid at {formatDateTime(paidAt!).dateTime}
-								</Badge>
-							) : (
-								<Badge variant={"destructive"}>Not paid</Badge>
-							)}
+						<CardContent className="p-4 gap-4 bg-base-200 rounded-box flex flex-col">
+							<h2 className="text-xl">Payment Method</h2>
+							<section className="flex justify-between items-center">
+								<p className="mb-2">{paymentMethod}</p>
+								{isPaid ? (
+									<Badge className="bg-success text-success-content rounded-full font-medium">
+										Paid at{" "}
+										{formatDateTime(paidAt!).dateTime}
+									</Badge>
+								) : (
+									<Badge className="bg-error text-error-content rounded-full font-medium">
+										Not paid
+									</Badge>
+								)}
+							</section>
 						</CardContent>
 					</Card>
-					<Card className="my-2">
-						<CardContent className="p-4 gap-4">
+					<Card>
+						<CardContent className="p-4 gap-4 bg-base-200 rounded-box ">
 							<h2 className="text-xl pb-4">Shipping Address</h2>
-							<p>{shippingAddress.fullName}</p>
-							<p>
-								{shippingAddress.streetAddress},{" "}
-								{shippingAddress.city}
-							</p>
-							<p className="mb-2">
-								{shippingAddress.postalCode},{" "}
-								{shippingAddress.country}
-							</p>
-							{isDelivered ? (
-								<Badge variant={"secondary"}>
-									Delivered at{" "}
-									{formatDateTime(deliveredAt!).dateTime}
-								</Badge>
-							) : (
-								<Badge variant={"destructive"}>
-									Not delivered
-								</Badge>
-							)}
+							<div className="flex justify-between items-center">
+								<section>
+									<p>{shippingAddress.fullName}</p>
+									<p>
+										{shippingAddress.streetAddress},{" "}
+										{shippingAddress.city}
+									</p>
+									<p className="mb-2">
+										{shippingAddress.postalCode},{" "}
+										{shippingAddress.country}
+									</p>
+								</section>
+								{isDelivered ? (
+									<Badge className="bg-success text-success-content rounded-full font-medium">
+										Delivered at{" "}
+										{formatDateTime(deliveredAt!).dateTime}
+									</Badge>
+								) : (
+									<Badge className="bg-error text-error-content rounded-full font-medium">
+										Not delivered
+									</Badge>
+								)}
+							</div>
 						</CardContent>
 					</Card>
 					<Card>
-						<CardContent className="p-4 gap-4">
+						<CardContent className="p-4 gap-4 bg-base-200 rounded-box">
 							<h2 className="text-xl pb-4">Order Items</h2>
 							<Table>
 								<TableHeader>
 									<TableRow>
 										<TableHead>Item</TableHead>
-										<TableHead>Quantity</TableHead>
+										<TableHead className="text-center">
+											Quantity
+										</TableHead>
 										<TableHead className="text-right">
 											Price
 										</TableHead>
@@ -212,7 +225,7 @@ const OrderDetailsTable = ({
 													{item.name}
 												</Link>
 											</TableCell>
-											<TableCell>
+											<TableCell className="text-center">
 												<span className="px-2">
 													{item.qty}
 												</span>
@@ -229,11 +242,11 @@ const OrderDetailsTable = ({
 						</CardContent>
 					</Card>
 				</div>
-				<div>
+				<div className="col-span-2 md:col-span-1">
 					<Card>
-						<CardContent className="p-4 gap-4 space-y-4">
+						<CardContent className="p-4 gap-4 space-y-4 bg-base-200 rounded-box">
 							<div className="flex justify-between">
-								<div>Items</div>
+								<section>Items</section>
 								<div>{formatCurrency(itemsPrice)}</div>
 							</div>
 							<div className="flex justify-between">
@@ -285,14 +298,18 @@ const OrderDetailsTable = ({
 									/>
 								)}
 
-							{/* COD Payment */}
-							{isAdmin &&
-								!isPaid &&
-								paymentMethod === "CashOnDelivery" && (
-									<MarkAsPaidButton />
-								)}
-							{isAdmin && isPaid && !isDelivered && (
-								<MarkAsDeliveredButton />
+							{/* COD / Delivery Actions */}
+							{isAdmin && (
+								<div className="text-right">
+									{!isPaid &&
+										paymentMethod === "CashOnDelivery" && (
+											<MarkAsPaidButton />
+										)}
+
+									{isPaid && !isDelivered && (
+										<MarkAsDeliveredButton />
+									)}
+								</div>
 							)}
 						</CardContent>
 					</Card>

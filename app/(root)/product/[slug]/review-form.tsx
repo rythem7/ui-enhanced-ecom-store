@@ -91,7 +91,7 @@ const ReviewForm = ({
 			<DialogTrigger asChild>
 				<button
 					onClick={handleFormOpen}
-					className="btn btn-primary text-primary-content font-light"
+					className="btn btn-secondary text-secondary-content font-light"
 				>
 					Write a Review
 				</button>

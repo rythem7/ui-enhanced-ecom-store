@@ -22,8 +22,6 @@ type ProfileType = z.infer<typeof updateUserSchema>;
 const ProfileForm = () => {
 	const { data: session, update } = useSession();
 
-	const userId = session?.user?.id;
-
 	const form = useForm<ProfileType>({
 		resolver: zodResolver(updateUserSchema),
 		defaultValues: {
@@ -86,7 +84,7 @@ const ProfileForm = () => {
 									<FormControl>
 										<Input
 											placeholder="Name"
-											className="input-field"
+											className="input-field bg-base-100"
 											{...field}
 										/>
 									</FormControl>
@@ -95,16 +93,15 @@ const ProfileForm = () => {
 							)}
 						/>
 					</div>
-					<Button
+					<button
 						type="submit"
-						size={"lg"}
-						className="button col-span-2 w-full"
+						className="btn btn-primary rounded-box col-span-2 w-full border-0"
 						disabled={form.formState.isSubmitting}
 					>
 						{form.formState.isSubmitting
 							? "Submitting..."
 							: "Update Profile"}
-					</Button>
+					</button>
 				</form>
 			</Form>
 		</>

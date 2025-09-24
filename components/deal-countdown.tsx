@@ -108,7 +108,7 @@ const DealCountdown = () => {
 					<StatBox label="Seconds" value={timeRemaining.seconds} />
 				</ul>
 				<div className="text-center">
-					<button className="btn btn-secondary rounded-full">
+					<button className="btn btn-secondary rounded-field">
 						<Link href="/search">Shop Now</Link>
 					</button>
 				</div>
@@ -119,6 +119,7 @@ const DealCountdown = () => {
 					alt="Deal of the Month"
 					width={300}
 					height={200}
+					className="rounded-box opacity-90"
 				/>
 			</div>
 		</section>

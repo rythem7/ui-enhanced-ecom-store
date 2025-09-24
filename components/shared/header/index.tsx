@@ -13,7 +13,7 @@ const Header = async () => {
 					<CategoryDrawer />
 					<Link
 						href="/"
-						className="flex justify-start items-center gap-4 ml-4"
+						className="justify-start items-center gap-4 md:ml-4 flex"
 					>
 						<Image
 							src="/images/logo.svg"
@@ -27,7 +27,7 @@ const Header = async () => {
 						</span>
 					</Link>
 				</div>
-				<div className="hidden md:block">
+				<div className="">
 					<Search wrap={false} />
 				</div>
 				<Menu />

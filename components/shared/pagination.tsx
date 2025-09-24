@@ -31,7 +31,7 @@ const Pagination = ({ page, totalPages }: PaginationProps) => {
 	return (
 		<div className="flex items-center justify-between">
 			<button
-				className="w-28 btn btn-primary md:btn-outline hover:bg-primary hover:text-primary-content rounded-box"
+				className="w-28 btn btn-primary md:btn-outline hover:bg-primary hover:text-primary-content rounded-field"
 				disabled={Number(page) <= 1}
 				onClick={() => handleClick("prev")}
 			>
@@ -41,7 +41,7 @@ const Pagination = ({ page, totalPages }: PaginationProps) => {
 				Page {page} of {totalPages}
 			</span>
 			<button
-				className="w-28 btn btn-primary md:btn-outline hover:bg-primary hover:text-primary-content rounded-box"
+				className="w-28 btn btn-primary md:btn-outline hover:bg-primary hover:text-primary-content rounded-field"
 				disabled={Number(page) >= totalPages}
 				onClick={() => handleClick("next")}
 			>

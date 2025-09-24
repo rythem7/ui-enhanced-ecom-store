@@ -35,8 +35,6 @@ export default function ProductPageAddToCart({
 	item: CartItem;
 	cart?: Cart;
 }) {
-	const router = useRouter();
-
 	const { isPending, performAction } = useCartAction();
 	const existingItem =
 		cart && cart.items.find((x) => x.productId === item.productId);
@@ -59,7 +57,7 @@ export default function ProductPageAddToCart({
 		</div>
 	) : (
 		<button
-			className="w-full btn btn-accent cursor-pointer text-accent-content"
+			className="w-full btn text-primary-content bg-primary brightness-85 lg:brightness-70 lg:hover:brightness-85"
 			onClick={handleAddToCart}
 			disabled={isPending}
 		>

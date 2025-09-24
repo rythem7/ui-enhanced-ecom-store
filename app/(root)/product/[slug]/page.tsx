@@ -11,8 +11,12 @@ import ReviewList from "./review-list";
 import { auth } from "@/auth";
 import Rating from "@/components/shared/product/rating";
 
-const ProductDetailsPage = async ({ params }: { params: { slug: string } }) => {
-	const { slug } = params;
+const ProductDetailsPage = async ({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) => {
+	const { slug } = await params;
 
 	const [product, cart, session] = await Promise.all([
 		getProductBySlug(slug),
@@ -21,38 +25,39 @@ const ProductDetailsPage = async ({ params }: { params: { slug: string } }) => {
 	]);
 
 	if (!product) notFound();
-	// const product = await getProductBySlug(slug);
-	// if (!product) notFound();
 
-	// const cart = (await getMyCart()) as Cart;
-
-	// const session = await auth();
 	const userId = session?.user?.id || "";
 
 	return (
-		<>
+		<div className="md:p-6">
 			<section>
-				<div className="grid grid-cols-1 md:grid-cols-5">
+				<div className="grid grid-cols-1 md:grid-cols-10 gap-6">
 					{/* Images Column */}
-					<div className="col-span-2">
+					<div className="md:col-span-4 lg:col-span-5">
 						<ProductImages images={product.images} />
 					</div>
 
 					{/* Details Column */}
-					<div className="col-span-2 p-5">
-						<div className="flex flex-col gap-6">
-							<p>
-								{product.brand} {product.category}
-							</p>
-							<h1 className="font-bold text-xl lg:text-2xl">
-								{product.name}
-							</h1>
-							<Rating value={Number(product.rating)} />
-							<p>{product.numReviews} Reviews</p>
+					<div className="md:col-span-3">
+						<div className="grid grid-cols-2 md:grid-cols-1 gap-4">
+							<div className="space-y-4 md:space-y-6">
+								<p>
+									{product.brand} {product.category}
+								</p>
+								<h1 className="font-bold text-xl lg:text-2xl">
+									{product.name}
+								</h1>
+							</div>
+							<section className="space-y-2 flex flex-col items-end md:items-start">
+								<span>
+									<Rating value={Number(product.rating)} />
+								</span>
+								<p>{product.numReviews} Reviews</p>
+							</section>
 							<div className="flex flex-row md:items-center gap-3">
 								<ProductPrice
 									value={Number(product.price)}
-									className="rounded-full bg-success/40 px-5 py-2"
+									className="rounded-full bg-success/30 brightness-125 px-5 py-2"
 								/>
 							</div>
 						</div>
@@ -62,9 +67,9 @@ const ProductDetailsPage = async ({ params }: { params: { slug: string } }) => {
 						</div>
 					</div>
 					{/* Action column */}
-					<div>
+					<div className="md:col-span-3 lg:col-span-2">
 						<Card>
-							<CardContent className="p-4">
+							<CardContent className="w-full p-4 bg-transparent rounded-box">
 								<div className="mb-2 flex justify-between gap-2">
 									<div>Price</div>
 									<div>
@@ -118,7 +123,7 @@ const ProductDetailsPage = async ({ params }: { params: { slug: string } }) => {
 					productSlug={product.slug ?? ""}
 				/>
 			</section>
-		</>
+		</div>
 	);
 };
 

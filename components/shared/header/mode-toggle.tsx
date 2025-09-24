@@ -9,19 +9,33 @@ import {
 	DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
-import { SunIcon, MoonIcon, SunMoon } from "lucide-react";
+import { THEME_OPTIONS } from "@/lib/constants";
+
+type ThemeOption = {
+	name: string;
+	icon: React.ReactNode;
+};
+
+// interface ModeToggleProps {
+// 	themes: ThemeOption[];
+// }
 
 const ModeToggle = () => {
 	const [mounted, setMounted] = useState(false);
 	const { theme, setTheme } = useTheme();
 
+	const themes: ThemeOption[] = THEME_OPTIONS;
+
 	useEffect(() => {
 		setMounted(true);
 	}, []);
 
-	if (!mounted) {
-		return null;
-	}
+	if (!mounted) return null;
+
+	// pick the active theme's icon, fallback to first one
+	const activeIcon =
+		themes.find((t) => t.name === theme)?.icon ?? themes[0]?.icon;
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -29,37 +43,25 @@ const ModeToggle = () => {
 					variant={"ghost"}
 					className="focus-visible:ring-0 focus-visible:ring-offset-0"
 				>
-					{theme === "system" ? (
-						<SunMoon />
-					) : theme === "aqua" ? (
-						<SunIcon />
-					) : (
-						<MoonIcon />
-					)}
+					{activeIcon}
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="bg-base-300/80 backdrop-blur-lg border-0">
+			<DropdownMenuContent className="bg-base-200/40 backdrop-blur-lg border-0 text-base-content">
 				<DropdownMenuLabel className="font-bold font-heading">
 					Appearance
 				</DropdownMenuLabel>
-				<DropdownMenuCheckboxItem
-					checked={theme === "system"}
-					onClick={() => setTheme("system")}
-				>
-					System
-				</DropdownMenuCheckboxItem>
-				<DropdownMenuCheckboxItem
-					checked={theme === "aqua"}
-					onClick={() => setTheme("aqua")}
-				>
-					Aqua
-				</DropdownMenuCheckboxItem>
-				<DropdownMenuCheckboxItem
-					checked={theme === "light"}
-					onClick={() => setTheme("light")}
-				>
-					Light
-				</DropdownMenuCheckboxItem>
+				{themes.map((t) => (
+					<DropdownMenuCheckboxItem
+						key={t.name}
+						checked={theme === t.name}
+						onClick={() => setTheme(t.name)}
+					>
+						<div className="flex items-center gap-2">
+							{t.icon}
+							<span className="capitalize">{t.name}</span>
+						</div>
+					</DropdownMenuCheckboxItem>
+				))}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

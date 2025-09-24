@@ -11,7 +11,15 @@ import { getAllCategories } from "@/lib/actions/product.actions";
 import { SearchIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Search = async ({ wrap = false }: { wrap?: boolean }) => {
+const Search = async ({
+	wrap = false,
+	drawer = false,
+	inputClasses = "",
+}: {
+	wrap?: boolean;
+	drawer?: boolean;
+	inputClasses?: string;
+}) => {
 	const categories = await getAllCategories();
 	return (
 		<form action="/search" method="GET">
@@ -24,7 +32,10 @@ const Search = async ({ wrap = false }: { wrap?: boolean }) => {
 				<section className="hidden md:block">
 					<Select name="category">
 						<SelectTrigger className="w-[150px] opacity-70 active:opacity-100">
-							<SelectValue placeholder="All" />
+							<SelectValue
+								placeholder="All"
+								defaultValue={"all"}
+							/>
 						</SelectTrigger>
 						<SelectContent className="bg-base-200">
 							<SelectItem value="all" key={"All"}>
@@ -41,10 +52,17 @@ const Search = async ({ wrap = false }: { wrap?: boolean }) => {
 				<Input
 					name="q"
 					type="text"
-					className="w-[200px] bg-base-100 focus:bg-base-200"
+					className={cn(
+						"w-[150px] md:w-[200px] border-0 input focus-visible:ring-0",
+						inputClasses
+					)}
 					placeholder="Search..."
 				/>
-				<Button type="submit" variant={"outline"}>
+				<Button
+					type="submit"
+					className={cn("border-0", drawer && "text-primary-content")}
+					variant={"ghost"}
+				>
 					<SearchIcon />
 				</Button>
 			</div>

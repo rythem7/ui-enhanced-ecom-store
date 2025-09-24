@@ -52,9 +52,9 @@ const AdminProductsPage = async (props: {
 					)}
 				</div>
 
-				<Button asChild variant={"default"}>
+				<button className="btn btn-primary btn-md btn-soft rounded-box">
 					<Link href="/admin/products/create">Add Product</Link>
-				</Button>
+				</button>
 			</div>
 			<Table>
 				<TableHeader>
@@ -89,11 +89,11 @@ const AdminProductsPage = async (props: {
 							<TableCell className="text-center">
 								{product.rating}
 							</TableCell>
-							<TableCell className="flex flex-row gap-1">
+							<TableCell className="flex gap-1">
 								<Link href={`/admin/products/${product.id}`}>
-									<Button variant={"outline"} size={"sm"}>
+									<button className="btn btn-soft btn-sm rounded-field">
 										Edit
-									</Button>
+									</button>
 								</Link>
 								<DeleteDialog
 									id={product.id}

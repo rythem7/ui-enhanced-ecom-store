@@ -23,21 +23,21 @@ const CategoryDrawer = async () => {
 						<MenuIcon />
 					</Button>
 				</DrawerTrigger>
-				<DrawerContent className="h-full max-w-xs lg:max-w-xs bg-accent/60 backdrop-blur-lg border-0">
+				<DrawerContent className="h-full max-w-xs lg:max-w-xs bg-primary/80 text-primary-content backdrop-blur-lg border-0">
 					<DrawerHeader>
-						<DrawerTitle className="font-heading font-medium text-2xl">
+						<DrawerTitle className="font-heading font-semibold text-2xl text-primary-content">
 							Select a category
 						</DrawerTitle>
 						<div className="flex flex-col mt-2">
 							<Button
 								variant="ghost"
-								className="w-full flex items-center justify-start"
+								className="w-full flex items-center justify-start text-primary-content"
 								asChild
 							>
 								<DrawerClose asChild>
 									<Link
 										href={`/search?category=all`}
-										className="w-full flex items-center justify-start"
+										className="w-full flex items-center justify-start "
 									>
 										All Categories
 									</Link>
@@ -45,32 +45,31 @@ const CategoryDrawer = async () => {
 							</Button>
 							{categories.map((x) => (
 								<Button
-									key={x.category}
 									variant="ghost"
-									className="w-full flex items-center justify-start"
+									key={x.category}
+									className="w-full flex items-center justify-start text-primary-content"
 									asChild
 								>
 									<DrawerClose asChild>
 										<Link
 											href={`/search?category=${x.category}`}
-											className="w-full flex items-center justify-start"
+											className=" w-full flex items-center justify-start"
 										>
 											{x.category} ({x._count})
 										</Link>
 									</DrawerClose>
 								</Button>
 							))}
-							<Search wrap={true} />
 						</div>
 					</DrawerHeader>
 					<DrawerHeader>
-						<DrawerTitle className="font-heading font-medium text-2xl">
+						<DrawerTitle className="font-heading font-semibold text-2xl text-primary-content">
 							Price
 						</DrawerTitle>
 						<div className="flex flex-col mt-2">
 							<Button
 								variant="ghost"
-								className="w-full flex items-center justify-start"
+								className="w-full flex items-center justify-start text-primary-content"
 								asChild
 							>
 								<DrawerClose asChild>
@@ -86,7 +85,7 @@ const CategoryDrawer = async () => {
 								<Button
 									key={x.value}
 									variant="ghost"
-									className="w-full flex items-center justify-start"
+									className="w-full flex items-center justify-start text-primary-content"
 									asChild
 								>
 									<DrawerClose asChild>
@@ -100,6 +99,11 @@ const CategoryDrawer = async () => {
 								</Button>
 							))}
 						</div>
+						<Search
+							wrap={true}
+							drawer={true}
+							inputClasses="text-primary-content bg-primary/40 rounded-field"
+						/>
 					</DrawerHeader>
 				</DrawerContent>
 			</Drawer>

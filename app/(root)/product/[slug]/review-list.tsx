@@ -30,8 +30,10 @@ export default function ReviewList({
 		isLoading,
 		error,
 		mutate,
-	} = useSWR<ReviewType[]>(["reviews", productId], () =>
-		getReviews({ productId }).then((res) => res.data)
+	} = useSWR<ReviewType[]>(
+		["reviews", productId],
+		() => getReviews({ productId }).then((res) => res.data),
+		{ revalidateOnFocus: false, dedupingInterval: 60000 }
 	);
 
 	if (error) {

@@ -1,20 +1,26 @@
-import { DollarSign, Headset, ShoppingBag, WalletCards } from "lucide-react";
+import {
+	// DollarSign,
+	Headset,
+	ShoppingBag,
+	WalletCards,
+	IndianRupee,
+} from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 
 const IconBoxes = () => {
 	return (
-		<div className="my-20 bg-base-200 shadow-sm rounded-box">
+		<div className="my-15 md:my-20 bg-base-200 shadow-sm rounded-box">
 			<Card>
 				<CardContent className="grid md:grid-cols-4 gap-4 p-4">
 					<div className="space-y-2">
 						<ShoppingBag />
 						<div className="text-sm font-bold">Free Shipping</div>
 						<div className="text-sm">
-							Free shipping on orders above $100
+							Free shipping on orders above &#8377;1500
 						</div>
 					</div>
 					<div className="space-y-2">
-						<DollarSign />
+						<IndianRupee />
 						<div className="text-sm font-bold">
 							Money Back Guarantee
 						</div>

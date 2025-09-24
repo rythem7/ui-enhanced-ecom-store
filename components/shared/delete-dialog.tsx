@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Button } from "../ui/button";
 import { toast } from "sonner";
 import {
 	AlertDialog,
@@ -39,11 +38,11 @@ const DeleteDialog = ({
 	return (
 		<AlertDialog open={isOpen} onOpenChange={setIsOpen}>
 			<AlertDialogTrigger asChild>
-				<Button variant="destructive" className="ml-2" size={"sm"}>
+				<button className="btn btn-error btn-sm rounded-field">
 					Delete
-				</Button>
+				</button>
 			</AlertDialogTrigger>
-			<AlertDialogContent>
+			<AlertDialogContent className="bg-warning text-warning">
 				<AlertDialogHeader>
 					<AlertDialogTitle className="text-lg font-semibold">
 						Are you absolutely sure?
@@ -53,15 +52,16 @@ const DeleteDialog = ({
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel>Cancel</AlertDialogCancel>
-					<Button
-						variant="destructive"
-						size={"sm"}
+					<AlertDialogCancel className="rounded-field h-[31px] btn">
+						Cancel
+					</AlertDialogCancel>
+					<button
 						onClick={onDelete}
 						disabled={isPending}
+						className="btn btn-error btn-sm rounded-field"
 					>
 						{isPending ? "Deleting..." : "Yes, Delete"}
-					</Button>
+					</button>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

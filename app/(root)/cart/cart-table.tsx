@@ -24,18 +24,12 @@ import { ArrowRight } from "lucide-react";
 const CartTable = ({ cart }: { cart?: Cart }) => {
 	return (
 		<>
-			<h1 className="py-4 font-heading font-medium text-2xl lg:text-3xl">
-				Shopping Cart
-			</h1>
 			{!cart || cart.items.length === 0 ? (
 				<div>
 					Cart is empty.{" "}
-					<Link href={"/"} className="text-accent cursor-pointer">
+					<Link href={"/"} className="text-primary cursor-pointer">
 						Go Shopping{" "}
-						<ArrowRight
-							color="green"
-							className="w-4 h-4 inline-block"
-						/>
+						<ArrowRight className="w-4 h-4 inline-block" />
 					</Link>
 				</div>
 			) : (

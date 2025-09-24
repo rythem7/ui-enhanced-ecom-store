@@ -1,3 +1,5 @@
+import { SunIcon, MoonIcon, SunMoon } from "lucide-react";
+
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Prostore";
 export const APP_DESCRIPTION =
 	process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
@@ -82,3 +84,22 @@ export const reviewDefaultValues = {
 export const SENDER_EMAIL = process.env.SENDER_EMAIL || "onboarding@resend.dev";
 
 export const ACTIVE_OPTION_CLASS = "font-bold text-primary";
+export const INACTIVE_OPTION_CLASS =
+	"text-base-content/80 hover:text-base-content";
+
+export const THEME_OPTIONS = [
+	{ name: "system", icon: <SunMoon /> },
+	{ name: "light", icon: <SunIcon /> },
+	{ name: "cupcake", icon: <SunIcon /> },
+	{ name: "fantasy", icon: <SunIcon /> },
+	{ name: "emerald", icon: <SunIcon /> },
+	{ name: "corporate", icon: <SunIcon /> },
+	{ name: "pastel", icon: <SunIcon /> },
+	{ name: "autumn", icon: <SunIcon /> },
+	{ name: "lemonade", icon: <SunIcon /> },
+	{ name: "silk", icon: <SunIcon /> },
+	{ name: "coffee", icon: <MoonIcon /> },
+	{ name: "luxury", icon: <MoonIcon /> },
+	{ name: "aqua", icon: <MoonIcon /> },
+	{ name: "dark", icon: <MoonIcon /> },
+];

@@ -10,7 +10,7 @@ export default function UserLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<div className="flex min-h-screen flex-col">
+		<div className="flex min-h-screen flex-col bg-base-300">
 			<div className="border-b max-w-7xl lg:mx-auto p-5 md:px-10 w-full flex justify-between items-center">
 				<div className="flex justify-start items-center">
 					<Link
@@ -23,9 +23,7 @@ export default function UserLayout({
 							width={48}
 							height={48}
 						/>
-						{/* <span className="hidden lg:block font-bold text-2xl">
-							{APP_NAME}
-						</span> */}
+						<span className=" font-bold text-2xl">{APP_NAME}</span>
 					</Link>
 					{/* Main Nav */}
 					<MainNav className="ml-10 hidden md:flex" />
