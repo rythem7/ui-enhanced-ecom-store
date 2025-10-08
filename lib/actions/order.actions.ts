@@ -130,6 +130,7 @@ export async function createPayPalOrder(orderId: string) {
 			where: {
 				id: orderId,
 			},
+			select: { totalPrice: true },
 		});
 		if (order) {
 			// Create a paypal order
@@ -147,7 +148,7 @@ export async function createPayPalOrder(orderId: string) {
 						id: paypalOrder.id,
 						email_address: "",
 						status: "",
-						pricePaid: "0",
+						pricePaid: order.totalPrice,
 					},
 				},
 			});
@@ -352,16 +353,16 @@ export async function getAllOrders({
 	query?: string;
 }) {
 	const queryFilter: Prisma.OrderWhereInput =
-		query && query !== "all" ?
-			{
-				user: {
-					name: {
-						contains: query,
-						mode: "insensitive",
-					} as Prisma.StringFilter,
-				},
-			}
-		:	{};
+		query && query !== "all"
+			? {
+					user: {
+						name: {
+							contains: query,
+							mode: "insensitive",
+						} as Prisma.StringFilter,
+					},
+			  }
+			: {};
 
 	// Fetch orders with pagination
 	const data = await prisma.order.findMany({

@@ -13,7 +13,7 @@ const calcPrice = (items: CartItem[]) => {
 	const itemsPrice = round2(
 		items.reduce((acc, item) => acc + Number(item.price) * item.qty, 0)
 	);
-	const shippingPrice = round2(itemsPrice > 100 ? 0 : 10);
+	const shippingPrice = round2(itemsPrice > 2000 ? 0 : 100);
 	const taxPrice = round2(0.15 * itemsPrice);
 	const totalPrice = round2(itemsPrice + taxPrice + shippingPrice);
 
@@ -33,8 +33,9 @@ export async function addItemToCart(data: CartItem) {
 
 		// get the session and user ID
 		const session = await auth();
-		const userId =
-			session?.user?.id ? (session.user.id as string) : undefined;
+		const userId = session?.user?.id
+			? (session.user.id as string)
+			: undefined;
 
 		// Get cart
 		const cart = (await getMyCart()) as GetCart | null;
@@ -45,6 +46,7 @@ export async function addItemToCart(data: CartItem) {
 		// Find Product in database
 		const product = await prisma.product.findFirst({
 			where: { id: item.productId },
+			select: { id: true, name: true, stock: true, slug: true },
 		});
 
 		if (!product) throw new Error("Product Not Found");

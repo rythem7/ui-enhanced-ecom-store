@@ -1,3 +1,5 @@
+export const revalidate = 300;
+
 import ProductList from "@/components/shared/product/product-list";
 import ProductCarousel from "@/components/shared/product/product-carousel";
 import { ViewAllProductsButton } from "@/components/view-all-products-button";

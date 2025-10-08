@@ -36,7 +36,7 @@ export const signInFormSchema = z.object({
 export const signUpFormSchema = z
 	.object({
 		name: z.string().min(3, "Name must be at least 3 characters"),
-		email: z.string().email("Invalid Email Address"),
+		email: z.email("Invalid Email Address"),
 		password: z.string().min(6, "Password must be atleast 6 characters"),
 		confirmPassword: z
 			.string()
