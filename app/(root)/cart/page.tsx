@@ -1,15 +1,8 @@
-import { Cart } from "@/types";
-import CartTable from "./cart-table";
-import { getMyCart } from "@/lib/actions/cart.actions";
+import CartTableClient from "./cart-table";
 import { Suspense } from "react";
 
 export const metadata = {
 	title: "Cart",
-};
-
-const CartTableWrapper = async () => {
-	const cart = (await getMyCart()) as Cart | undefined;
-	return <CartTable cart={cart} />;
 };
 
 const CartPage = () => {
@@ -19,7 +12,7 @@ const CartPage = () => {
 				Shopping Cart
 			</h1>
 			<Suspense fallback={<div>Loading...</div>}>
-				<CartTableWrapper />
+				<CartTableClient />
 			</Suspense>
 		</>
 	);

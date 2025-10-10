@@ -24,6 +24,19 @@ export async function getLatestProducts() {
 export async function getProductBySlug(slug: string) {
 	return await prisma.product.findUnique({
 		where: { slug },
+		select: {
+			id: true,
+			name: true,
+			slug: true,
+			description: true,
+			price: true,
+			category: true,
+			brand: true,
+			rating: true,
+			numReviews: true,
+			stock: true,
+			images: true,
+		},
 	});
 }
 
@@ -117,6 +130,16 @@ export async function getAllProducts({
 		skip: (page - 1) * limit,
 		take: limit,
 		orderBy: sortOptions,
+		select: {
+			slug: true,
+			name: true,
+			images: true,
+			price: true,
+			rating: true,
+			id: true,
+			brand: true,
+			stock: true,
+		},
 	});
 	const totalItems = await prisma.product.count({
 		where: {

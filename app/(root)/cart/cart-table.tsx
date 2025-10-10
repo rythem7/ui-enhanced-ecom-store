@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Cart } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import Link from "next/link";
@@ -21,7 +22,13 @@ import {
 } from "@/components/shared/product/add-to-cart";
 import { ArrowRight } from "lucide-react";
 
-const CartTable = ({ cart }: { cart?: Cart }) => {
+async function fetchCart(): Promise<Cart> {
+	const res = await fetch("/api/cart", { cache: "no-store" });
+	if (!res.ok) throw new Error("Failed to fetch cart");
+	return res.json();
+}
+
+export function CartTable({ cart }: { cart?: Cart }) {
 	return (
 		<>
 			{!cart || cart.items.length === 0 ? (
@@ -102,6 +109,33 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
 			)}
 		</>
 	);
-};
+}
 
-export default CartTable;
+export default function CartTableClient() {
+	const [cart, setCart] = useState<Cart | undefined>(undefined);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchCart = async () => {
+			try {
+				const response = await fetch("/api/cart", {
+					cache: "no-store",
+				});
+				const data = await response.json();
+				setCart(data);
+			} catch (error) {
+				console.error("Error fetching cart:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchCart();
+	}, []);
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+
+	return <CartTable cart={cart} />;
+}
