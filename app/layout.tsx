@@ -4,6 +4,7 @@ import { Montserrat, Roboto } from "next/font/google";
 import "@/assets/styles/globals.css";
 import { APP_NAME, APP_DESCRIPTION, SERVER_URL } from "@/lib/constants";
 import { ThemeProvider } from "@/components/theme-provider";
+import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -47,8 +48,10 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					{children}
-					<Toaster richColors={true} />
+					<QueryProvider>
+						{children}
+						<Toaster richColors={true} />
+					</QueryProvider>
 				</ThemeProvider>
 			</body>
 		</html>

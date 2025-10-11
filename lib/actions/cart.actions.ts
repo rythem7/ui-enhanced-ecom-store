@@ -29,13 +29,14 @@ export async function addItemToCart(data: CartItem) {
 	try {
 		// Check for cart cookie
 		const sessionCartId = (await cookies()).get("sessionCartId")?.value;
-		if (!sessionCartId) throw new Error("Cart Session not found");
+
+		if (!sessionCartId) {
+			return { success: false, message: "Cart session not found" };
+		}
 
 		// get the session and user ID
 		const session = await auth();
-		const userId = session?.user?.id
-			? (session.user.id as string)
-			: undefined;
+		const userId = session?.user?.id ?? undefined;
 
 		// Get cart
 		const cart = (await getMyCart()) as GetCart | null;
@@ -48,7 +49,7 @@ export async function addItemToCart(data: CartItem) {
 			where: { id: item.productId },
 		});
 
-		if (!product) throw new Error("Product Not Found");
+		if (!product) return { success: false, message: "Product not found" };
 
 		if (!cart) {
 			const newCart = insertCartSchema.parse({
@@ -70,49 +71,56 @@ export async function addItemToCart(data: CartItem) {
 				success: true,
 				message: `${product.name} added to cart`,
 			};
-		} else {
-			// Check if item is already in the cart
-			const existingItem = cart.items.find(
-				(cartItem) => cartItem.productId === item.productId
-			);
+		}
+		// Check if item is already in the cart
+		const existingItem = cart.items.find(
+			(cartItem) => cartItem.productId === item.productId
+		);
 
-			if (existingItem) {
-				// Check Stock
-				if (product.stock < existingItem.qty + 1) {
-					throw new Error("Not Enough Stock");
-				}
-
-				existingItem.qty += 1;
-			} else {
-				// If item is not in cart
-				// Check Stock
-				if (product.stock < 1) throw new Error("Not enough Stock");
-
-				// Add item to the cart.items
-				cart.items.push(item);
+		if (existingItem) {
+			// Check Stock
+			if (product.stock < existingItem.qty + 1) {
+				return {
+					success: false,
+					message: "Not enough stock",
+				};
 			}
 
-			// Save to database
-			await prisma.cart.update({
-				where: { id: cart.id },
-				data: {
-					items: cart.items as Prisma.CartUpdateitemsInput[],
-					...calcPrice(cart.items as CartItem[]),
-				},
-			});
+			existingItem.qty += 1;
+		} else {
+			// If item is not in cart
+			// Check Stock
+			if (product.stock < 1) {
+				return {
+					success: false,
+					message: "Not enough stock",
+				};
+			}
 
-			revalidatePath(`/product/${product.slug}`);
-			return {
-				success: true,
-				message: `${product.name} ${
-					existingItem ? "updated in" : "added to"
-				} cart`,
-			};
+			// Add item to the cart.items
+			cart.items.push(item);
 		}
+
+		// Save to database
+		await prisma.cart.update({
+			where: { id: cart.id },
+			data: {
+				items: cart.items as Prisma.CartUpdateitemsInput[],
+				...calcPrice(cart.items as CartItem[]),
+			},
+		});
+
+		revalidatePath(`/product/${product.slug}`);
+		return {
+			success: true,
+			message: `${product.name} ${
+				existingItem ? "updated in" : "added to"
+			} cart`,
+		};
 	} catch (error) {
 		return {
 			success: false,
-			message: formatError(error),
+			message: formatError(error) || "Error adding item to cart",
 		};
 	}
 }
@@ -147,21 +155,28 @@ export async function removeItemFromCart(productId: string) {
 	try {
 		// Check for cart cookie
 		const sessionCartId = (await cookies()).get("sessionCartId")?.value;
-		if (!sessionCartId) throw new Error("Cart Session not found");
+		if (!sessionCartId) {
+			return { success: false, message: "Cart session not found" };
+		}
 
 		// Get Product
 		const product = await prisma.product.findFirst({
 			where: { id: productId },
+			select: { id: true, name: true, slug: true },
 		});
-		if (!product) throw new Error("Product Not Found");
+		if (!product) return { success: false, message: "Product not found" };
 
 		// Get user cart
 		const cart = (await getMyCart()) as GetCart | null;
-		if (!cart) throw new Error("Cart Not Found");
+		if (!cart) {
+			return { success: false, message: "Cart not found" };
+		}
 
 		// Check for item
 		const existingItem = cart.items.find((x) => x.productId === productId);
-		if (!existingItem) throw new Error("Item not found in cart");
+		if (!existingItem) {
+			return { success: false, message: "Item not found in cart" };
+		}
 
 		// Check if only 1 in qty
 		if (existingItem.qty === 1) {

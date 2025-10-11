@@ -5,8 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import ProductPrice from "@/components/shared/product/product-price";
 import ProductImages from "@/components/shared/product/product-images";
 import ProductPageAddToCart from "@/components/shared/product/add-to-cart";
-import { getMyCart } from "@/lib/actions/cart.actions";
-import { Cart } from "@/types";
+// import { getMyCart } from "@/lib/actions/cart.actions";
+// import { Cart } from "@/types";
 import ReviewList from "./review-list";
 import { auth } from "@/auth";
 import Rating from "@/components/shared/product/rating";
@@ -18,9 +18,9 @@ const ProductDetailsPage = async ({
 }) => {
 	const { slug } = await params;
 
-	const [product, cart, session] = await Promise.all([
+	const [product, session] = await Promise.all([
 		getProductBySlug(slug),
-		getMyCart() as Promise<Cart>,
+		// getMyCart() as Promise<Cart>,
 		auth(),
 	]);
 
@@ -96,7 +96,7 @@ const ProductDetailsPage = async ({
 								{product.stock > 0 && (
 									<div className="flex justify-center items-center">
 										<ProductPageAddToCart
-											cart={cart}
+											// cart={cart}
 											item={{
 												productId: product.id,
 												name: product.name,

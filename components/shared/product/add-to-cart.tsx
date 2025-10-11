@@ -5,93 +5,98 @@ import { Plus, Minus, Loader, ArrowRight } from "lucide-react";
 import { CartItem } from "@/types";
 import { useCartAction } from "@/hooks/useCartAction";
 import { useRouter } from "next/navigation";
-import { Cart } from "@/types";
 import { useTransition } from "react";
 import Link from "next/link";
+import { useCart } from "@/hooks/useCart";
 
-interface CartButtonProps {
-	icon: React.ReactNode;
-	action: () => void;
-	isPending: boolean;
-}
+// interface CartButtonProps {
+// 	icon: React.ReactNode;
+// 	action: () => void;
+// 	isPending: boolean;
+// }
 
-export function CartButton({ icon, action, isPending }: CartButtonProps) {
-	return (
-		<Button
-			type="button"
-			variant={"outline"}
-			onClick={action}
-			disabled={isPending}
-		>
-			{isPending ? <Loader className="w-4 h-4 animate-spin" /> : icon}
-		</Button>
+// export function CartButton({ icon, action, isPending }: CartButtonProps) {
+// 	return (
+// 		<Button
+// 			type="button"
+// 			variant={"outline"}
+// 			onClick={action}
+// 			disabled={isPending}
+// 		>
+// 			{isPending ? <Loader className="w-4 h-4 animate-spin" /> : icon}
+// 		</Button>
+// 	);
+// }
+
+export default function ProductPageAddToCart({ item }: { item: CartItem }) {
+	const { data: cart } = useCart();
+	const { addItemMutation } = useCartAction();
+
+	const existingItem = cart?.items.find(
+		(x) => x.productId === item.productId
 	);
-}
-
-export default function ProductPageAddToCart({
-	item,
-	cart,
-}: {
-	item: CartItem;
-	cart?: Cart;
-}) {
-	const { isPending, performAction } = useCartAction();
-	const existingItem =
-		cart && cart.items.find((x) => x.productId === item.productId);
 
 	const handleAddToCart = () => {
-		performAction("add", item);
+		addItemMutation.mutate(item);
 	};
 
 	// Check if item exists in cart
-
 	return existingItem ? (
 		<div className="flex items-center">
 			<RemoveButton productId={item.productId} />
 			<span className="px-2">{existingItem.qty}</span>
-			<CartButton
-				icon={<Plus className="h-4 w-4" />}
-				action={handleAddToCart}
-				isPending={isPending}
-			/>
+			<AddButton item={item} />
 		</div>
 	) : (
-		<button
-			className="w-full btn text-primary-content bg-primary brightness-85 lg:brightness-70 lg:hover:brightness-85"
+		<Button
+			type="button"
 			onClick={handleAddToCart}
-			disabled={isPending}
+			disabled={addItemMutation.isPending}
 		>
-			{isPending ? (
+			{addItemMutation.isPending ? (
 				<Loader className="w-4 h-4 animate-spin" />
 			) : (
-				<Plus className="h-4 w-4" />
+				"Add to Cart"
 			)}
-			Add To Cart
-		</button>
+		</Button>
 	);
 }
 
 export function AddButton({ item }: { item: CartItem }) {
-	const { isPending, performAction } = useCartAction();
+	const { addItemMutation } = useCartAction();
 
 	return (
-		<CartButton
-			icon={<Plus className="w-4 h-4" />}
-			action={() => performAction("add", item)}
-			isPending={isPending}
-		/>
+		<Button
+			type="button"
+			variant={"outline"}
+			onClick={() => addItemMutation.mutate(item)}
+			disabled={addItemMutation.isPending}
+		>
+			{addItemMutation.isPending ? (
+				<Loader className="w-4 h-4 animate-spin" />
+			) : (
+				<Plus className="h-4 w-4" />
+			)}
+		</Button>
 	);
 }
 
 export function RemoveButton({ productId }: { productId: string }) {
-	const { isPending, performAction } = useCartAction();
+	const { removeItemMutation } = useCartAction();
 
 	return (
-		<CartButton
-			icon={<Minus className="w-4 h-4" />}
-			action={() => performAction("remove", productId)}
-			isPending={isPending}
-		/>
+		<Button
+			type="button"
+			variant={"outline"}
+			onClick={() => removeItemMutation.mutate(productId)}
+			disabled={removeItemMutation.isPending}
+		>
+			{removeItemMutation.isPending ? (
+				<Loader className="w-4 h-4 animate-spin" />
+			) : (
+				<Minus className="h-4 w-4" />
+			)}
+		</Button>
 	);
 }
 

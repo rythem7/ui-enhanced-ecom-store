@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Cart } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import Link from "next/link";
@@ -21,12 +20,7 @@ import {
 	GoToCheckout,
 } from "@/components/shared/product/add-to-cart";
 import { ArrowRight } from "lucide-react";
-
-async function fetchCart(): Promise<Cart> {
-	const res = await fetch("/api/cart", { cache: "no-store" });
-	if (!res.ok) throw new Error("Failed to fetch cart");
-	return res.json();
-}
+import { useCart } from "@/hooks/useCart";
 
 export function CartTable({ cart }: { cart?: Cart }) {
 	return (
@@ -112,29 +106,13 @@ export function CartTable({ cart }: { cart?: Cart }) {
 }
 
 export default function CartTableClient() {
-	const [cart, setCart] = useState<Cart | undefined>(undefined);
-	const [loading, setLoading] = useState(true);
+	const { data: cart, isLoading, isError } = useCart();
 
-	useEffect(() => {
-		const fetchCart = async () => {
-			try {
-				const response = await fetch("/api/cart", {
-					cache: "no-store",
-				});
-				const data = await response.json();
-				setCart(data);
-			} catch (error) {
-				console.error("Error fetching cart:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchCart();
-	}, []);
-
-	if (loading) {
+	if (isLoading) {
 		return <div>Loading...</div>;
+	}
+	if (isError) {
+		return <div>Failed to load cart.</div>;
 	}
 
 	return <CartTable cart={cart} />;
