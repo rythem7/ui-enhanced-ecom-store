@@ -1,15 +1,24 @@
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductPrice from "@/components/shared/product/product-price";
-import ProductImages from "@/components/shared/product/product-images";
-import ProductPageAddToCart from "@/components/shared/product/add-to-cart";
+// import ProductImages from "@/components/shared/product/product-images";
+// import ProductPageAddToCart from "@/components/shared/product/add-to-cart";
 // import { getMyCart } from "@/lib/actions/cart.actions";
 // import { Cart } from "@/types";
-import ReviewList from "./review-list";
-import { auth } from "@/auth";
+// import ReviewList from "./review-list";
+// import { auth } from "@/auth";
 import Rating from "@/components/shared/product/rating";
+const ReviewList = dynamic(() => import("./review-list"));
+const ProductImages = dynamic(
+	() => import("@/components/shared/product/product-images")
+);
+const ProductPageAddToCart = dynamic(
+	() => import("@/components/shared/product/add-to-cart")
+);
 
 const ProductDetailsPage = async ({
 	params,
@@ -18,15 +27,9 @@ const ProductDetailsPage = async ({
 }) => {
 	const { slug } = await params;
 
-	const [product, session] = await Promise.all([
-		getProductBySlug(slug),
-		// getMyCart() as Promise<Cart>,
-		auth(),
-	]);
+	const product = await getProductBySlug(slug);
 
 	if (!product) notFound();
-
-	const userId = session?.user?.id || "";
 
 	return (
 		<div className="md:p-6">
@@ -34,7 +37,13 @@ const ProductDetailsPage = async ({
 				<div className="grid grid-cols-1 md:grid-cols-10 gap-6">
 					{/* Images Column */}
 					<div className="md:col-span-4 lg:col-span-5">
-						<ProductImages images={product.images} />
+						<Suspense
+							fallback={
+								<div className="h-80 bg-base-100 animate-pulse" />
+							}
+						>
+							<ProductImages images={product.images} />
+						</Suspense>
 					</div>
 
 					{/* Details Column */}
@@ -95,17 +104,23 @@ const ProductDetailsPage = async ({
 								</div>
 								{product.stock > 0 && (
 									<div className="flex justify-center items-center">
-										<ProductPageAddToCart
-											// cart={cart}
-											item={{
-												productId: product.id,
-												name: product.name,
-												slug: product.slug,
-												price: product.price,
-												qty: 1,
-												image: product.images![0],
-											}}
-										/>
+										<Suspense
+											fallback={
+												<div className="h-10 w-full bg-gray-200 animate-pulse" />
+											}
+										>
+											<ProductPageAddToCart
+												// cart={cart}
+												item={{
+													productId: product.id,
+													name: product.name,
+													slug: product.slug,
+													price: product.price,
+													qty: 1,
+													image: product.images![0],
+												}}
+											/>
+										</Suspense>
 									</div>
 								)}
 							</CardContent>
@@ -117,11 +132,12 @@ const ProductDetailsPage = async ({
 				<h2 className="font-bold font-heading text-2xl lg:text-3xl mb-4">
 					Reviews
 				</h2>
-				<ReviewList
-					userId={userId ?? ""}
-					productId={product.id ?? ""}
-					productSlug={product.slug ?? ""}
-				/>
+				<Suspense fallback={<div>Loading reviews...</div>}>
+					<ReviewList
+						productId={product.id ?? ""}
+						productSlug={product.slug ?? ""}
+					/>
+				</Suspense>
 			</section>
 		</div>
 	);

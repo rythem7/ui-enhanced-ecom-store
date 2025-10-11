@@ -6,6 +6,7 @@ import { APP_NAME, APP_DESCRIPTION, SERVER_URL } from "@/lib/constants";
 import { ThemeProvider } from "@/components/theme-provider";
 import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -48,10 +49,12 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<QueryProvider>
-						{children}
-						<Toaster richColors={true} />
-					</QueryProvider>
+					<SessionProvider>
+						<QueryProvider>
+							{children}
+							<Toaster richColors={true} />
+						</QueryProvider>
+					</SessionProvider>
 				</ThemeProvider>
 			</body>
 		</html>
