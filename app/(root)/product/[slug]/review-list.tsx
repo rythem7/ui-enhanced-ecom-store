@@ -2,6 +2,7 @@
 
 import type { ReviewType } from "@/types";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import ReviewForm from "./review-form";
 import { getReviews } from "@/lib/actions/review.actions";
@@ -17,11 +18,9 @@ import { Calendar, User } from "lucide-react";
 import { formatDateTime } from "@/lib/utils";
 
 export default function ReviewList({
-	userId,
 	productId,
 	productSlug,
 }: {
-	userId: string;
 	productId: string;
 	productSlug: string;
 }) {
@@ -35,6 +34,8 @@ export default function ReviewList({
 		() => getReviews({ productId }).then((res) => res.data),
 		{ revalidateOnFocus: false, dedupingInterval: 60000 }
 	);
+	const { data: session } = useSession();
+	const userId = session?.user?.id;
 
 	if (error) {
 		return <p>Error loading reviews</p>;

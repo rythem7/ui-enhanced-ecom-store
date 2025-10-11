@@ -17,7 +17,7 @@ const CheckoutSteps = ({ current = 0 }) => {
 							"p-2 w-56 rounded-full text-center text-sm"
 						)}
 					>
-						<span
+						<section
 							className={cn(
 								"flex flex-wrap justify-center",
 								index === current
@@ -26,7 +26,7 @@ const CheckoutSteps = ({ current = 0 }) => {
 							)}
 						>
 							{step}
-						</span>
+						</section>
 					</div>
 					{step !== "Place Order" && (
 						<hr className="w-16 border-t border-gray-300 mx-2" />

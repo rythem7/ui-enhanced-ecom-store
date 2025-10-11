@@ -20,8 +20,9 @@ import {
 	GoToCheckout,
 } from "@/components/shared/product/add-to-cart";
 import { ArrowRight } from "lucide-react";
+import { useCart } from "@/hooks/useCart";
 
-const CartTable = ({ cart }: { cart?: Cart }) => {
+export function CartTable({ cart }: { cart?: Cart }) {
 	return (
 		<>
 			{!cart || cart.items.length === 0 ? (
@@ -102,6 +103,17 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
 			)}
 		</>
 	);
-};
+}
 
-export default CartTable;
+export default function CartTableClient() {
+	const { data: cart, isLoading, isError } = useCart();
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+	if (isError) {
+		return <div>Failed to load cart.</div>;
+	}
+
+	return <CartTable cart={cart} />;
+}
