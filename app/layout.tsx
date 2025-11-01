@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+eimport { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
 import "@/assets/styles/globals.css";
@@ -45,7 +45,7 @@ export default function RootLayout({
 			>
 				<ThemeProvider
 					attribute="data-theme"
-					defaultTheme="lemonade"
+					defaultTheme="emerald"
 					enableSystem
 					disableTransitionOnChange
 				>
