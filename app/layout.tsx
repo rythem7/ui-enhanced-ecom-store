@@ -45,7 +45,7 @@ export default function RootLayout({
 			>
 				<ThemeProvider
 					attribute="data-theme"
-					defaultTheme="luxury"
+					defaultTheme="lemonade"
 					enableSystem
 					disableTransitionOnChange
 				>
