@@ -1,4 +1,4 @@
-eimport { Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
 import "@/assets/styles/globals.css";
